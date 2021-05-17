@@ -1,19 +1,22 @@
 <?php
+
 namespace Cors\TestCase\Middleware;
 
+use Cake\Controller\Component\RequestHandlerComponent;
 use PHPUnit\Framework\TestCase;
 use Cake\Http\ServerRequestFactory;
 use Cake\Http\Response;
 use Cors\Routing\Middleware\CorsMiddleware;
 use Cake\Core\Configure;
 
-class CorsMiddlewareTest extends TestCase {
+class CorsMiddlewareTest extends TestCase
+{
 
     private $server = [];
 
     const BASE_ORIGIN = 'http://test.com';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->server = [
@@ -25,7 +28,7 @@ class CorsMiddlewareTest extends TestCase {
         Configure::write('Cors',  (array) Configure::consume('Cors-default'));
     }
 
-    private function _setServer(Array $server)
+    private function _setServer(array $server)
     {
         $this->server = array_merge($this->server, $server);
     }
@@ -33,12 +36,11 @@ class CorsMiddlewareTest extends TestCase {
     private function _sendRequest()
     {
         $request = ServerRequestFactory::fromGlobals($this->server);
-        $response = new Response();
         $middleware = new CorsMiddleware();
         $next = function ($request, $response) {
             return $response;
         };
-        $response = $middleware($request, $response, $next);
+        $response = $middleware->process($request, $next);
         return $response;
     }
 

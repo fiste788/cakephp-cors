@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cors\Routing\Middleware;
 
 use Cake\Core\Configure;
